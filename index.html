@@ -64,7 +64,7 @@
 
     .message {
       max-width: 480px;
-      margin: 0 auto 30px;
+      margin: 0 auto 16px;
       font-size: clamp(15px, 2vw, 17px);
       color: #4f5865;
       line-height: 1.65;
@@ -84,19 +84,12 @@
     }
 
     .countdown {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
       font-size: 14px;
       color: #4f5865;
     }
 
     #seconds {
-      min-width: 22px;
       color: #b8954a;
-      font-size: 18px;
-      font-weight: 700;
     }
 
     .progress {
@@ -164,9 +157,7 @@
       You will be taken to <span class="site">psvineet.me</span>.
     </p>
     <div class="box">
-      <div class="countdown">
-        Redirecting in <span id="seconds">5</span> seconds
-      </div>
+      <div class="countdown">Redirecting in <span id="seconds">5</span> seconds</div>
       <div class="progress">
         <div class="progress-bar"></div>
       </div>
