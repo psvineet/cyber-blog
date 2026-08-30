@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Hacker Holiday 2026 — Writeup</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --cream: #faf8f3;
+            --navy: #132244;
+            --gold: #c9a227;
+            --gold-light: #e3c65a;
+            --text: #22262f;
+            --white: #ffffff;
+            --border: #e8e3d5;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--cream);
+            color: var(--text);
+            font-family: "Noto Sans", sans-serif;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Hero (doubles as page header, matches other writeups) */
+
+        .hero {
+            background: linear-gradient(160deg, var(--navy) 0%, #1d3364 100%);
+            color: var(--white);
+            padding: 2.2rem clamp(1rem, 5vw, 2.5rem) 3rem;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .hero-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero .eyebrow {
+            color: var(--gold-light);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+            font-weight: 700;
+            line-height: 1.25;
+        }
+
+        .hero p.lede {
+            margin-top: 1rem;
+            color: #dfe3ee;
+            max-width: 680px;
+            font-size: 1.05rem;
+        }
+
+        /* Main */
+
+        main {
+            width: min(900px, 92%);
+            margin: 40px auto;
+            flex: 1;
+        }
+
+        .links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+        }
+
+        .links a {
+            display: block;
+            padding: 18px 20px;
+            background: var(--white);
+            color: var(--navy);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: "Noto Sans", sans-serif;
+
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--gold);
+            border-radius: 8px;
+
+            box-shadow: 0 2px 8px rgba(19, 34, 68, 0.05);
+
+            transition:
+                background 0.2s ease,
+                color 0.2s ease,
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .links a:hover {
+            background: var(--navy);
+            color: var(--white);
+            border-left-color: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(19, 34, 68, 0.15);
+        }
+
+        .links a:focus-visible {
+            outline: 3px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        /* Footer — slim single row */
+
+        footer {
+            background: var(--navy);
+            color: var(--white);
+            padding: 16px 20px;
+            border-top: 3px solid var(--gold);
+        }
+
+        footer .inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+
+        footer .name {
+            color: var(--gold-light);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        footer .contact {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px 16px;
+        }
+
+        footer a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s ease;
+        }
+
+        footer a:hover {
+            color: var(--gold-light);
+        }
+
+        footer a:focus-visible {
+            outline: 2px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 600px) {
+
+            .hero {
+                padding: 1.6rem 15px 2.2rem;
+            }
+
+            main {
+                width: 90%;
+                margin: 25px auto;
+            }
+
+            .links {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .links a {
+                padding: 16px;
+            }
+
+            footer {
+                padding: 14px 15px;
+            }
+
+            footer .inner {
+                flex-direction: column;
+                text-align: center;
+                gap: 6px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="eyebrow">Cyber Blog · Vineet Pratap Singh</div>
+            <h1>Hacker Holiday 2026</h1>
+            <p class="lede">Writeup index — the full series, plus standalone pieces on security fundamentals and methodology.</p>
+        </div>
+    </section>
+
+    <main>
+        <div class="links">
+
+            <!-- Brochure -->
+            <a href="The brochure.html">
+                The brochure
+            </a>
+
+            <!-- 27 July -->
+            <a href="The concierge knows too much - 27th July.html">
+                The concierge knows too much - 27th July
+            </a>
+
+            <!-- 28 July -->
+            <a href="Room 404 - 28th July.html">
+                Room 404 - 28th July
+            </a>
+
+            <!-- 29 July -->
+            <a href="Complimentary - 29th July.html">
+                Complimentary - 29th July
+            </a>
+
+            <!-- 30 July -->
+            <a href="Packed Light - 30th July.html">
+                Packed Light - 30th July
+            </a>
+
+            <!-- 31 July -->
+            <a href="Beach Bar - 31st July.html">
+                Beach Bar - 31st July
+            </a>
+
+            <!-- 1 August -->
+            <a href="Overheard at Breakfast - 1st August.html">
+                Overheard at Breakfast - 1st August
+            </a>
+
+            <!-- 2 August -->
+            <a href="Do Not Disturb - 2nd August.html">
+                Do Not Disturb - 2nd August
+            </a>
+
+            <!-- 3 August -->
+            <a href="Towel on the Sunbed - 3rd August.html">
+                Towel on the Sunbed - 3rd August
+            </a>
+
+            <!-- 4 August -->
+            <a href="CryptoCabana - 4th August.html">
+                CryptoCabana - 4th August
+            </a>
+
+            <!-- 5 August -->
+            <a href="The Hollow Shell - 5th August.html">
+                The Hollow Shell - 5th August
+            </a>
+
+            <!-- 6 August -->
+            <a href="Infinity Pool - 6th August.html">
+                Infinity Pool - 6th August
+            </a>
+
+            <!-- 7 August -->
+            <a href="After Hours - 7th August.html">
+                After Hours - 7th August
+            </a>
+
+            <!-- 8 August -->
+            <a href="The Guestbook - 8th August.html">
+                The Guestbook - 8th August
+            </a>
+
+            <!-- 9 August -->
+            <a href="Management Wants a Word - 9th August.html">
+                Management Wants a Word - 9th August
+            </a>
+
+            <!-- Pentesting Frameworks -->
+            <a href="Pentesting Frameworks - Choosing the Right One.html">
+                Pentesting Frameworks — Choosing the Right One
+            </a>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="inner">
+            <div class="name">Vineet Pratap Singh</div>
+            <div class="contact">
+                <a href="https://psvineet.me" target="_blank" rel="noopener noreferrer">psvineet.me</a>
+                <a href="mailto:connect.vps@icloud.com">connect.vps@icloud.com</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>
