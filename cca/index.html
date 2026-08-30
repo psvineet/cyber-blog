@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Common Cyber Attacks — Vineet Pratap Singh</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --cream: #faf8f3;
+      --cream-dark: #f0ece1;
+      --cream-border: #e3ded0;
+      --navy: #132244;
+      --navy-mid: #1d3364;
+      --navy-light: #2c4a8c;
+      --gold: #c9a227;
+      --gold-light: #e3c65a;
+      --gold-pale: #f7edcf;
+      --text-body: #22262f;
+      --text-muted: #5c6270;
+      --font-serif: 'Noto Sans', sans-serif;
+      --font-sans: 'Noto Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--cream);
+      color: var(--text-body);
+      font-family: var(--font-sans);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    /* ── HERO ── (doubles as the page header, shared with all writeups) */
+    .hero{
+      background:linear-gradient(160deg,var(--navy) 0%,var(--navy-mid) 100%);
+      color:#fff;padding:2.2rem clamp(1rem,5vw,2.5rem) 3rem;
+      border-bottom:3px solid var(--gold);
+    }
+    .hero-inner{max-width:1100px;margin:0 auto;}
+    .hero .eyebrow{color:var(--gold-light);font-size:.8rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;margin-bottom:.8rem;font-family:var(--font-sans);}
+    .hero h1{font-size:clamp(1.8rem,4.2vw,2.7rem);font-weight:700;line-height:1.25;max-width:820px;font-family:var(--font-sans);}
+    .hero p.lede{margin-top:1rem;color:#dfe3ee;max-width:680px;font-size:1.05rem;font-family:var(--font-sans);}
+
+    /* ── TOC BAR (mobile only) ── */
+    .toc-bar {
+      background: var(--cream-dark);
+      border-top: 1px solid var(--cream-border);
+      border-bottom: 3px solid var(--gold);
+      padding: 0 clamp(1rem, 5vw, 4rem);
+      display: none;
+    }
+    @media (max-width: 900px) {
+      .toc-bar { display: block; }
+    }
+    .toc-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1rem 0;
+    }
+    .toc-label {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .toc-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 1rem;
+      list-style: none;
+    }
+    .toc-links a {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--navy-mid);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.2rem 0;
+      border-bottom: 1px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .toc-links a:hover {
+      color: var(--gold);
+      border-color: var(--gold);
+    }
+
+    /* ── LAYOUT ── */
+    .page-body {
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: clamp(1.5rem, 5vw, 3rem) clamp(1rem, 5vw, 2rem);
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 0 3rem;
+      align-items: start;
+    }
+
+    /* ── SIDEBAR TOC ── */
+    .sidebar-toc {
+      position: sticky;
+      top: 1.5rem;
+      padding: 1.2rem 0;
+    }
+    .sidebar-toc-label {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.8rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--gold);
+      display: block;
+    }
+    .sidebar-toc ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .sidebar-toc a {
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 500;
+      padding: 0.45rem 0.75rem;
+      display: block;
+      border-left: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+      line-height: 1.4;
+      border-radius: 0 4px 4px 0;
+    }
+    .sidebar-toc a:hover {
+      color: var(--navy);
+      border-color: var(--gold);
+      background: var(--gold-pale);
+    }
+    .sidebar-toc a.active {
+      color: var(--navy);
+      border-color: var(--gold);
+      background: var(--gold-pale);
+      font-weight: 600;
+    }
+    .sidebar-toc .toc-num {
+      font-size: 0.62rem;
+      color: var(--gold);
+      font-weight: 700;
+      margin-right: 0.3rem;
+    }
+
+    .content-main {
+      min-width: 0;
+    }
+
+    /* ── SECTIONS ── */
+    .blog-section {
+      margin-bottom: 3.5rem;
+    }
+    .section-eyebrow {
+      font-family: var(--font-sans);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .blog-section h2 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.5rem, 3.5vw, 2rem);
+      color: var(--navy);
+      font-weight: normal;
+      line-height: 1.25;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--cream-border);
+    }
+    .blog-section h3 {
+      font-family: var(--font-serif);
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      color: var(--navy-mid);
+      font-weight: normal;
+      margin: 1.8rem 0 0.7rem;
+    }
+    .blog-section p {
+      font-family: var(--font-sans);
+      color: var(--text-body);
+      margin-bottom: 1rem;
+      font-size: clamp(0.9rem, 1.6vw, 1rem);
+      line-height: 1.8;
+    }
+
+    /* ── LISTS ── */
+    .blog-section ul,
+    .blog-section ol {
+      margin: 0.8rem 0 1rem 1.5rem;
+    }
+    .blog-section li {
+      font-family: var(--font-sans);
+      font-size: clamp(0.88rem, 1.5vw, 0.97rem);
+      margin-bottom: 0.55rem;
+      line-height: 1.75;
+      color: var(--text-body);
+    }
+    .blog-section li strong {
+      color: var(--navy);
+    }
+
+    /* ── CALLOUT / TIP BOX ── */
+    .callout {
+      background: var(--gold-pale);
+      border-left: 4px solid var(--gold);
+      padding: 1rem 1.3rem;
+      margin: 1.5rem 0;
+      border-radius: 0 4px 4px 0;
+    }
+    .callout p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--navy);
+    }
+    .callout strong {
+      color: var(--navy);
+    }
+    .callout.danger {
+      background: #fff4f4;
+      border-color: #c0392b;
+    }
+    .callout.danger p { color: #7a1e1e; }
+
+    /* ── INLINE CODE ── */
+    code {
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 0.85em;
+      background: var(--cream-dark);
+      border: 1px solid var(--cream-border);
+      padding: 0.1em 0.35em;
+      border-radius: 3px;
+      color: var(--navy-mid);
+    }
+
+    /* ── PHISHING TABLE ── */
+    .attack-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.2rem 0 1.5rem;
+      font-family: var(--font-sans);
+      font-size: 0.88rem;
+    }
+    .attack-table th {
+      background: var(--navy);
+      color: var(--gold-light);
+      text-align: left;
+      padding: 0.65rem 1rem;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    .attack-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--cream-border);
+      vertical-align: top;
+      line-height: 1.6;
+    }
+    .attack-table tr:nth-child(even) td {
+      background: var(--cream-dark);
+    }
+    .attack-table td:first-child {
+      font-weight: 700;
+      color: var(--navy-mid);
+      white-space: nowrap;
+      width: 130px;
+    }
+
+    /* ── 3-2-1 RULE CARDS ── */
+    .rule-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+      margin: 1.2rem 0 1.5rem;
+    }
+    .rule-card {
+      background: var(--navy);
+      color: #fff;
+      border-radius: 6px;
+      padding: 1.2rem 1rem;
+      text-align: center;
+    }
+    .rule-num {
+      font-family: var(--font-serif);
+      font-size: 2.5rem;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .rule-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold-light);
+      margin-bottom: 0.4rem;
+    }
+    .rule-desc {
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.5;
+    }
+
+    /* ── COLLAPSIBLE CASE STUDY ── */
+    .case-study {
+      margin: 1.8rem 0;
+      border: 1px solid var(--cream-border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .case-study-toggle {
+      width: 100%;
+      background: var(--navy-mid);
+      border: none;
+      cursor: pointer;
+      padding: 0.85rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      text-align: left;
+      transition: background 0.2s;
+    }
+    .case-study-toggle:hover {
+      background: var(--navy);
+    }
+    .case-study-toggle:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: -2px;
+    }
+    .cs-label {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .cs-badge {
+      font-family: var(--font-sans);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: var(--gold);
+      color: var(--navy);
+      padding: 0.15rem 0.5rem;
+      border-radius: 2px;
+      font-weight: 700;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .cs-title {
+      font-family: var(--font-serif);
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      color: #fff;
+      font-weight: normal;
+    }
+    .cs-arrow {
+      color: var(--gold);
+      font-size: 1rem;
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+    .case-study-toggle[aria-expanded="true"] .cs-arrow {
+      transform: rotate(180deg);
+    }
+    .case-study-body {
+      display: none;
+      background: #fff;
+      padding: 1.3rem 1.5rem;
+      border-top: 2px solid var(--gold);
+    }
+    .case-study-body.open {
+      display: block;
+    }
+    .case-study-body p {
+      font-family: var(--font-sans);
+      font-size: 0.9rem;
+      line-height: 1.75;
+      color: var(--text-body);
+      margin-bottom: 0.8rem;
+    }
+    .case-study-body p:last-child { margin-bottom: 0; }
+    .case-study-body a {
+      color: var(--navy-mid);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .case-study-body a:hover { color: var(--gold); }
+
+    /* ── SAFETY CHECKLIST ── */
+    .safety-list {
+      list-style: none;
+      margin: 0.8rem 0 1rem;
+    }
+    .safety-list li {
+      display: flex;
+      gap: 0.7rem;
+      align-items: flex-start;
+      margin-bottom: 0.6rem;
+      font-size: clamp(0.88rem, 1.5vw, 0.95rem);
+      color: var(--text-body);
+      line-height: 1.7;
+    }
+    .safety-list li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 0.9rem;
+      margin-top: 0.1rem;
+      flex-shrink: 0;
+    }
+
+    /* ── DIVIDER ── */
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--cream-border);
+      margin: 2.5rem 0;
+    }
+
+    /* ── PASSWORD EXAMPLES ── */
+    .pw-example {
+      background: var(--navy);
+      border-left: 4px solid var(--gold);
+      padding: 0.7rem 1.1rem;
+      margin: 0.6rem 0 1rem;
+      border-radius: 0 4px 4px 0;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: clamp(0.75rem, 1.5vw, 0.88rem);
+      color: var(--gold-light);
+      word-break: break-all;
+    }
+    .pw-label {
+      font-family: var(--font-sans);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    /* ── DIAGRAMS ── */
+    .diagram-box {
+      background: var(--cream-dark);
+      border: 1px solid var(--cream-border);
+      border-radius: 8px;
+      padding: 1.2rem 1rem 1rem;
+      margin: 1.4rem 0 1.7rem;
+    }
+    .diagram-box svg {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+    .diagram-caption {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 0.7rem;
+      letter-spacing: 0.02em;
+    }
+
+    /* ── ICON GRID (delivery methods / bot swarm) ── */
+    .icon-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.9rem;
+      margin: 1.2rem 0 1.5rem;
+    }
+    .icon-card {
+      background: #fff;
+      border: 1px solid var(--cream-border);
+      border-radius: 6px;
+      padding: 0.9rem 0.8rem;
+      text-align: center;
+    }
+    .icon-card svg { margin-bottom: 0.5rem; }
+    .icon-card-label {
+      font-family: var(--font-sans);
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 0.2rem;
+    }
+    .icon-card-desc {
+      font-family: var(--font-sans);
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* ── FOOTER ── slim single row (shared with all writeups) */
+    footer{background:var(--navy);color:#fff;border-top:3px solid var(--gold);padding:1rem 1.2rem;margin-top:3rem;}
+    footer .inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem 1rem;}
+    footer .name{color:var(--gold-light);font-size:.85rem;font-weight:600;font-family:var(--font-sans);}
+    footer .contact{display:flex;flex-wrap:wrap;gap:.4rem 1rem;}
+    footer a{color:#fff;text-decoration:none;font-size:.85rem;font-family:var(--font-sans);}
+    footer a:hover{color:var(--gold-light);}
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .page-body {
+        grid-template-columns: 1fr;
+        padding: 1.5rem 1.2rem;
+      }
+      .sidebar-toc { display: none; }
+    }
+    @media (max-width: 600px) {
+      .attack-table { font-size: 0.8rem; }
+      .attack-table td:first-child { width: 90px; white-space: normal; }
+      .rule-cards { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 400px) {
+      .toc-links { flex-direction: column; }
+    }
+
+    /* ── REDUCED MOTION ── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .cs-arrow { transition: none; }
+      .case-study-toggle { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">Cyber Blog · Vineet Pratap Singh</div>
+    <h1>Common Cyber Attacks — What They Are &amp; How to Stay Safe</h1>
+    <p class="lede">A deep-dive into the most prevalent attack vectors — social engineering, phishing, malware, web application attacks, denial-of-service, password attacks, supply chain compromise, SIM swapping, business email compromise, and more — with practical, field-tested defences against each.</p>
+  </div>
+</section>
+
+<!-- TABLE OF CONTENTS (mobile top bar — hidden on desktop) -->
+<nav class="toc-bar" aria-label="Article sections">
+  <div class="toc-inner">
+    <div class="toc-label">Jump to section</div>
+    <ul class="toc-links">
+      <li><a href="#social-engineering">Social Engineering</a></li>
+      <li><a href="#phishing">Phishing</a></li>
+      <li><a href="#malware">Malware &amp; Ransomware</a></li>
+      <li><a href="#web-attacks">Web App Attacks</a></li>
+      <li><a href="#ddos">Denial-of-Service</a></li>
+      <li><a href="#passwords">Passwords</a></li>
+      <li><a href="#mfa">MFA &amp; Password Managers</a></li>
+      <li><a href="#public-wifi">Public Wi-Fi</a></li>
+      <li><a href="#supply-chain">Supply Chain &amp; Insiders</a></li>
+      <li><a href="#emerging">Emerging Threats</a></li>
+      <li><a href="#backups">Backups</a></li>
+      <li><a href="#updates">Updates &amp; Antivirus</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="page-body">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar-toc" aria-label="Article navigation">
+    <span class="sidebar-toc-label">Contents</span>
+    <ul>
+      <li><a href="#social-engineering" class="toc-link"><span class="toc-num">01</span>Social Engineering</a></li>
+      <li><a href="#phishing" class="toc-link"><span class="toc-num">02</span>Phishing</a></li>
+      <li><a href="#malware" class="toc-link"><span class="toc-num">03</span>Malware &amp; Ransomware</a></li>
+      <li><a href="#web-attacks" class="toc-link"><span class="toc-num">04</span>Web App Attacks</a></li>
+      <li><a href="#ddos" class="toc-link"><span class="toc-num">05</span>Denial-of-Service</a></li>
+      <li><a href="#passwords" class="toc-link"><span class="toc-num">06</span>Passwords</a></li>
+      <li><a href="#mfa" class="toc-link"><span class="toc-num">07</span>MFA &amp; Password Managers</a></li>
+      <li><a href="#public-wifi" class="toc-link"><span class="toc-num">08</span>Public Wi-Fi</a></li>
+      <li><a href="#supply-chain" class="toc-link"><span class="toc-num">09</span>Supply Chain &amp; Insiders</a></li>
+      <li><a href="#emerging" class="toc-link"><span class="toc-num">10</span>Emerging Threats</a></li>
+      <li><a href="#backups" class="toc-link"><span class="toc-num">11</span>Backups</a></li>
+      <li><a href="#updates" class="toc-link"><span class="toc-num">12</span>Updates &amp; Antivirus</a></li>
+    </ul>
+  </aside>
+
+  <main class="content-main" role="main">
+
+    <!-- ── SOCIAL ENGINEERING ── -->
+    <section class="blog-section" id="social-engineering">
+      <div class="section-eyebrow">Attack Vector #1</div>
+      <h2>Social Engineering</h2>
+
+      <p>Social engineering is any cyberattack where a <strong>human</strong> — rather than a computer — is the target. It is sometimes called "People Hacking" for exactly that reason. An attacker who wants your password could try to brute-force it computationally, or they could simply <em>ask you for it</em> — often with alarming success.</p>
+
+      <p>What makes social engineering particularly dangerous is its multi-layered nature. An attacker might begin by harvesting small pieces of publicly available information from your social media profiles. That initial haul then gets weaponised to extract more sensitive data from, say, your phone carrier or broadband provider. Each stage feeds the next, snowballing into something that can ultimately compromise your bank account, your identity, or your employer's infrastructure.</p>
+
+      <h3>Beyond the Phone Call</h3>
+      <p>Charismatic hackers impersonating you over the phone are just one variety. Attackers also drop malicious USB drives in company car parks, hoping a curious employee will plug one into a work machine. Others leave "charging cables" in airport lounges — cables that contain keyloggers or remote-access tools disguised inside the hardware.</p>
+
+      <!-- CASE STUDY: STUXNET -->
+      <div class="case-study" id="case-stuxnet">
+        <button class="case-study-toggle" aria-expanded="false" aria-controls="cs-stuxnet-body" onclick="toggleCase(this)">
+          <span class="cs-label">
+            <span class="cs-badge">Case Study</span>
+            <span class="cs-title">Stuxnet — When a USB Drive Sabotaged a Nuclear Programme</span>
+          </span>
+          <span class="cs-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="case-study-body" id="cs-stuxnet-body">
+          <p>Stuxnet was a sophisticated computer worm allegedly developed by the United States and Israel, first deployed against Iran's nuclear programme in 2009. As a self-replicating worm, it was capable of cloning itself across networks — including the internet — which ultimately caused it to spread far beyond its intended target.</p>
+          <p>The fascinating social engineering angle: Iran's nuclear facility had no internet connection, making remote infection impossible. The solution was brutally simple. Attackers dropped malicious USB devices in locations where contractors who serviced the facility would find them. One curious employee plugged a device into a work computer, and Stuxnet was inside the air-gapped network. The worm subsequently destroyed a significant number of nuclear centrifuges, causing severe disruption to the programme.</p>
+          <p>The takeaway is unambiguous: <em>never plug unknown media into any device connected to sensitive infrastructure.</em></p>
+        </div>
+      </div>
+
+      <h3>How to Protect Yourself</h3>
+      <ul class="safety-list">
+        <li>Set up multiple forms of authentication and use difficult, unique answers for security questions (store them in a password manager — more on that below).</li>
+        <li>Never plug external media — USBs, CDs, "found" cables — into any computer you care about. Hand discovered devices to your local police or IT security team.</li>
+        <li>Always insist on verified proof of identity when someone contacts you claiming to represent a company. Use a known, trusted contact number to independently confirm. No legitimate employee will ever ask for your password.</li>
+      </ul>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── PHISHING ── -->
+    <section class="blog-section" id="phishing">
+      <div class="section-eyebrow">Attack Vector #2</div>
+      <h2>Phishing</h2>
+
+      <p>Phishing is a sub-category of social engineering, and arguably the most prolific one. Where social engineering is a broad umbrella, phishing specifically describes attacks in which a victim is tricked into opening a malicious webpage — typically via email, SMS, or voice/video call. These variants have their own names: <strong>smishing</strong> (SMS-based) and <strong>vishing</strong> (voice-based).</p>
+
+      <p>Phishing emails typically deploy psychological pressure — a false sense of urgency being the most common — and nearly always contain a link to an attacker-controlled web application that mimics a legitimate site. Once the victim enters credentials, the attacker has everything they need.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="phish-diagram-title">
+          <title id="phish-diagram-title">Phishing attack flow from attacker to stolen credentials</title>
+          <defs>
+            <marker id="arrowGold" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <rect x="6" y="35" width="150" height="62" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="81" y="61" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Attacker</text>
+          <text x="81" y="79" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">crafts a fake message</text>
+
+          <path d="M158 66 H196" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold)"/>
+
+          <rect x="198" y="35" width="160" height="62" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="278" y="61" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Email / SMS / Call</text>
+          <text x="278" y="79" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">urgent, familiar tone</text>
+
+          <path d="M360 66 H398" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold)"/>
+
+          <rect x="400" y="35" width="150" height="62" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="475" y="61" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Fake Login Page</text>
+          <text x="475" y="79" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">looks identical to real site</text>
+
+          <path d="M552 66 H590" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold)"/>
+
+          <rect x="592" y="35" width="122" height="62" rx="6" fill="#7a1e1e" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="653" y="61" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Credentials</text>
+          <text x="653" y="79" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">stolen &amp; reused</text>
+        </svg>
+        <div class="diagram-caption">The anatomy of a phishing attack — each step exploits trust built by the one before it.</div>
+      </div>
+
+      <h3>The Three Tiers of Phishing</h3>
+      <table class="attack-table" aria-label="Phishing attack types">
+        <thead>
+          <tr><th>Attack Type</th><th>Description</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>General Phishing</td>
+            <td>Mass campaigns targeting large groups (e.g., all PayPal or Amazon customers). Usually crude, with visible errors, but effective at scale.</td>
+          </tr>
+          <tr>
+            <td>Spearphishing</td>
+            <td>Targeted at a specific individual or organisation. Better crafted, often part of a larger campaign. Much harder to detect.</td>
+          </tr>
+          <tr>
+            <td>Whaling</td>
+            <td>Targets high-value individuals — C-suite executives, board members. Extremely well-crafted and difficult to identify without training.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Spotting a Phishing Attack</h3>
+      <p>Generic attacks are often detectable: poor grammar, generic salutations ("Dear Customer"), and suspicious sender addresses (free Gmail domains posing as corporate entities). But sophisticated attacks can fool even trained security professionals. A few reliable signals to watch for:</p>
+      <ul>
+        <li><strong>Domain substitution:</strong> A real-world 2021 SMS campaign used <code>royalmai1.co.uk</code> instead of <code>royalmail.co.uk</code> — swapping the final "l" for the digit "1".</li>
+        <li><strong>Masked hyperlinks:</strong> HTML emails can display <code>https://amazon.co.uk</code> as link text while the actual destination is <code>https://am4zon.co.uk</code>. Always hover over links on desktop to see the real URL in the status bar before clicking.</li>
+        <li><strong>Urgency triggers:</strong> Any email pressuring you to act immediately is a red flag — attackers exploit panic to bypass rational thinking.</li>
+      </ul>
+
+      <h3>Staying Safe from Phishing</h3>
+      <ul class="safety-list">
+        <li>Delete and report suspicious emails. Never open attachments from untrusted senders — including unexpected attachments from known contacts.</li>
+        <li>Do not click embedded links. Navigate directly to the official website in your browser instead.</li>
+        <li>Keep your device and antivirus software current at all times.</li>
+        <li>Minimise your public digital footprint. Use a disposable "burner" email address when you must register somewhere untrusted.</li>
+      </ul>
+
+      <div class="callout">
+        <p><strong>Remember:</strong> Anyone can fall for a sophisticated phishing attack. If it happens to you, stay calm, change affected passwords immediately, and notify your IT team if the incident occurred at work.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── MALWARE ── -->
+    <section class="blog-section" id="malware">
+      <div class="section-eyebrow">Attack Vector #3</div>
+      <h2>Malware &amp; Ransomware</h2>
+
+      <p>Malware — short for <em>malicious software</em> — is any software designed to perform hostile actions on behalf of an attacker. Once installed, it is commonly used to steal data, cause system damage, or execute arbitrary commands. A particularly common malware pattern is <strong>Command and Control (C2)</strong>, where the malware connects back to an attacker's server and hands over remote control of the infected machine.</p>
+
+      <h3>Ransomware: The Nuclear Option</h3>
+      <p>Ransomware is a specialised class of malware that encrypts the victim's data and demands payment — usually in cryptocurrency — in exchange for the decryption key. It spreads by exploiting known vulnerabilities in widely-used software and can propagate across entire networks with terrifying speed. Even when the ransom is paid, data recovery is far from guaranteed.</p>
+
+      <h3>Common Delivery Methods</h3>
+      <p>Malware reaches victims through several vectors — most rooted in social engineering:</p>
+      <ul>
+        <li>Microsoft Office documents containing <strong>malicious macros</strong> that execute on file open (requiring the user to click "Enable Content").</li>
+        <li>Compiled executables (<code>.exe</code>), PDFs, PowerShell scripts (<code>.ps1</code>), batch scripts (<code>.bat</code>), HTML applications (<code>.hta</code>), or JavaScript files (<code>.js</code>) sent via email or messaging.</li>
+        <li>Exploitation of vulnerabilities in public-facing infrastructure — web servers, VPNs, and remote desktop services — giving attackers a direct foothold into a corporate network.</li>
+      </ul>
+
+      <div class="icon-grid">
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg>
+          <div class="icon-card-label">Malicious macros</div>
+          <div class="icon-card-desc">Hidden inside Word or Excel files; run only after you click "Enable Content".</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg>
+          <div class="icon-card-label">Executable files</div>
+          <div class="icon-card-desc"><code>.exe</code>, <code>.ps1</code>, <code>.bat</code>, <code>.hta</code>, <code>.js</code> attachments sent by email or chat.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+          <div class="icon-card-label">Unpatched services</div>
+          <div class="icon-card-desc">Known flaws in exposed servers, VPNs, or remote-desktop tools left unfixed.</div>
+        </div>
+      </div>
+
+      <!-- CASE STUDY: ETERNAL BLUE / WANNACRY -->
+      <div class="case-study" id="case-wannacry">
+        <button class="case-study-toggle" aria-expanded="false" aria-controls="cs-wannacry-body" onclick="toggleCase(this)">
+          <span class="cs-label">
+            <span class="cs-badge">Case Study</span>
+            <span class="cs-title">EternalBlue &amp; WannaCry — The Danger of Skipped Updates</span>
+          </span>
+          <span class="cs-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="case-study-body" id="cs-wannacry-body">
+          <p>EternalBlue is a vulnerability affecting a core component of the Windows operating system. Originally believed to have been discovered by the NSA, it was leaked to the public in April 2017. The flaw allows a remote attacker to gain complete, highest-privilege access to a vulnerable machine.</p>
+          <p>Microsoft responded quickly with a security patch (MS17-010). However, countless administrators chose not to apply it. The consequences were catastrophic: the WannaCry ransomware adopted EternalBlue as its primary propagation mechanism, infecting millions of unpatched systems globally — including critical national health infrastructure — within hours of its release.</p>
+          <p>The lesson is blunt: <strong>patch your systems</strong>. A fix existed months before WannaCry. The damage was entirely preventable.</p>
+        </div>
+      </div>
+
+      <h3>Staying Safe from Malware</h3>
+      <ul class="safety-list">
+        <li>Always install operating system and software updates promptly. Security patches exist for a reason.</li>
+        <li>Never enable macros in Office documents received via email unless you have independently verified the source.</li>
+        <li>Back up important data regularly — a good backup can be the difference between recovery and catastrophe after a ransomware attack.</li>
+        <li>Keep antivirus software active and updated.</li>
+        <li>Never plug unknown USB devices into any machine.</li>
+      </ul>
+
+      <div class="callout danger">
+        <p><strong>If infected with ransomware:</strong> Do not pay the ransom. Contact local authorities immediately. Isolate the infected device by disabling its network connection — but do not power it off, as this may destroy decryption opportunities.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── WEB APPLICATION ATTACKS ── -->
+    <section class="blog-section" id="web-attacks">
+      <div class="section-eyebrow">Attack Vector #4</div>
+      <h2>Web Application Attacks</h2>
+
+      <p>Not every attack targets a person or a whole network — many target the websites and apps themselves, by abusing the way they handle the data you type into them. Two of the most common are <strong>SQL injection</strong> and <strong>cross-site scripting (XSS)</strong>. You don't need to be a developer to understand the core idea: a form field expects one kind of input, and gives an attacker a way in when it doesn't check carefully enough.</p>
+
+      <h3>SQL Injection: Tricking the Database</h3>
+      <p>Most websites store data — usernames, passwords, orders — in a database, and pull that data using a query language called SQL. If a site builds its queries by directly pasting in whatever a user typed, an attacker can type something that changes the meaning of the query instead of just supplying a value.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="sqli-diagram-title">
+          <title id="sqli-diagram-title">SQL injection example bypassing a login check</title>
+          <defs>
+            <marker id="arrowGold2" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <rect x="6" y="45" width="200" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="106" y="70" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="11.5" font-weight="600">Username field</text>
+          <text x="106" y="90" text-anchor="middle" fill="var(--gold-light)" font-family="Courier New, monospace" font-size="10">' OR '1'='1</text>
+
+          <path d="M208 75 H244" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold2)"/>
+
+          <rect x="246" y="30" width="270" height="90" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="381" y="52" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="11" font-weight="600">Query the app builds</text>
+          <text x="381" y="74" text-anchor="middle" fill="var(--gold-light)" font-family="Courier New, monospace" font-size="9">SELECT * FROM users WHERE</text>
+          <text x="381" y="90" text-anchor="middle" fill="var(--gold-light)" font-family="Courier New, monospace" font-size="9">user=" OR "1"="1"</text>
+          <text x="381" y="106" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="9" font-style="italic">"1=1" is always true</text>
+
+          <path d="M518 75 H556" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold2)"/>
+
+          <rect x="558" y="45" width="156" height="60" rx="6" fill="#7a1e1e" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="636" y="70" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="11.5" font-weight="600">Login bypassed</text>
+          <text x="636" y="90" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">no valid password needed</text>
+        </svg>
+        <div class="diagram-caption">A simplified SQL injection — the attacker's input turns a strict check into one that is always true.</div>
+      </div>
+
+      <p>Real attacks are rarely this simple, and modern frameworks defend against this exact pattern by default. But the underlying lesson generalises: any place a system mixes "data" and "instructions" without a clear boundary between them is a potential injection point.</p>
+
+      <h3>Cross-Site Scripting (XSS): Hijacking the Page</h3>
+      <p>XSS works on the same principle, aimed at your browser instead of a database. If a website displays user-submitted content — a comment, a profile bio, a search term — without properly neutralising it, an attacker can submit a small piece of code instead of text. When another visitor views that page, their browser runs the attacker's code as if it belonged to the site, which can be used to steal session cookies, redirect the page, or quietly log keystrokes.</p>
+
+      <h3>Staying Safe from Web Application Attacks</h3>
+      <ul class="safety-list">
+        <li>As a user: keep your browser updated, be cautious of links to sites you don't fully trust, and log out of sensitive accounts when using a shared computer.</li>
+        <li>As a developer or site owner: never build database queries by directly concatenating user input — use parameterised queries or an ORM instead.</li>
+        <li>Sanitise and encode any user-submitted content before displaying it back on a page.</li>
+        <li>Run periodic security testing (automated scanners or a professional penetration test) against any application handling sensitive data.</li>
+      </ul>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── DENIAL OF SERVICE ── -->
+    <section class="blog-section" id="ddos">
+      <div class="section-eyebrow">Attack Vector #5</div>
+      <h2>Denial-of-Service (DoS &amp; DDoS)</h2>
+
+      <p>Not every attack is about stealing data — some simply aim to make a service unavailable. A <strong>Denial-of-Service (DoS)</strong> attack floods a target with more traffic or requests than it can handle, so legitimate users can't get through. A <strong>Distributed</strong> Denial-of-Service (DDoS) attack does the same thing, but from thousands of machines at once — usually a "botnet" of previously infected devices, ranging from home computers to unsecured smart cameras and routers.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 190" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="ddos-diagram-title">
+          <title id="ddos-diagram-title">Many infected devices flooding a single target server</title>
+          <defs>
+            <marker id="arrowGold3" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+              <path d="M0,0 L7,3.5 L0,7 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <g font-family="Noto Sans, sans-serif">
+            <circle cx="60" cy="30" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <circle cx="60" cy="95" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <circle cx="60" cy="160" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <circle cx="150" cy="10" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <circle cx="150" cy="95" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <circle cx="150" cy="180" r="18" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.3"/>
+            <text x="105" y="205" text-anchor="middle" fill="var(--text-muted)" font-size="10">Botnet — thousands of infected devices</text>
+
+            <path d="M78 30 L330 90" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+            <path d="M78 95 L330 95" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+            <path d="M78 160 L330 100" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+            <path d="M168 10 L330 85" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+            <path d="M168 95 L330 95" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+            <path d="M168 180 L330 105" stroke="var(--gold)" stroke-width="1.4" marker-end="url(#arrowGold3)"/>
+
+            <rect x="335" y="60" width="180" height="70" rx="6" fill="#7a1e1e" stroke="var(--gold)" stroke-width="1.5"/>
+            <text x="425" y="90" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Target Server</text>
+            <text x="425" y="108" text-anchor="middle" fill="var(--gold-light)" font-size="9.5">overwhelmed, slow or offline</text>
+
+            <path d="M517 95 H555" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold3)"/>
+            <rect x="558" y="65" width="156" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+            <text x="636" y="90" text-anchor="middle" fill="#fff" font-size="11.5" font-weight="600">Real users</text>
+            <text x="636" y="108" text-anchor="middle" fill="var(--gold-light)" font-size="9.5">can't get through</text>
+          </g>
+        </svg>
+        <div class="diagram-caption">A DDoS attack drowns a server in junk requests so genuine visitors are pushed out.</div>
+      </div>
+
+      <p>For an individual, DDoS attacks are rarely something you can defend against directly — that responsibility sits with the service provider. But your own devices can unknowingly become part of somebody else's botnet, particularly routers, smart cameras, and other "Internet of Things" (IoT) devices that are rarely patched or monitored.</p>
+
+      <h3>Reducing Your Part in the Problem</h3>
+      <ul class="safety-list">
+        <li>Change default admin passwords on routers, cameras, and smart-home devices the moment you set them up.</li>
+        <li>Keep router and IoT device firmware updated — check the manufacturer's app or site periodically, as many devices don't update automatically.</li>
+        <li>Replace devices that no longer receive security updates from the manufacturer.</li>
+        <li>If you run a website or service, look into a reputable DDoS-mitigation or content-delivery provider (e.g., Cloudflare) that can absorb and filter malicious traffic before it reaches you.</li>
+      </ul>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── PASSWORDS ── -->
+    <section class="blog-section" id="passwords">
+      <div class="section-eyebrow">Attack Vector #6</div>
+      <h2>Password Attacks</h2>
+
+      <p>Despite their critical role in authentication, passwords remain one of the weakest links in most security chains. Even the strongest password in the world offers no protection if it is written on a sticky note, reused across multiple services, or stored by a provider in plaintext.</p>
+
+      <h3>What Makes a Strong Password?</h3>
+      <p>Advice has evolved. Complexity alone is no longer considered sufficient. Consider these three tiers:</p>
+
+      <div class="pw-label">Traditional (complex but potentially guessable)</div>
+      <div class="pw-example">@Ed1nburgh#1988-2000!</div>
+
+      <div class="pw-label">Better — a passphrase (long, memorable, resistant to brute-force)</div>
+      <div class="pw-example">Vim is _obviously_, indisputably the best text editor in existence!</div>
+
+      <div class="pw-label">Best — fully random (use a password manager to store)</div>
+      <div class="pw-example">w41=V1)S7KIJGPN,dII&gt;cHEh&gt;FRVQsj3M^]CB</div>
+
+      <h3>What Makes a Weak Password?</h3>
+      <p>A pattern like a name followed by a birth year followed by an exclamation mark — for example, <code>Gareth2012!</code> — satisfies most complexity requirements but is trivially guessable by anyone who knows you have a son called Gareth born in 2012. Social media makes this kind of information widely available. Short passwords are equally vulnerable to brute-force attacks regardless of how many symbols they contain.</p>
+
+      <p>Password <strong>reuse</strong> is an equally serious problem. If a strong password is leaked in a breach and you used it across multiple services, attackers will perform <em>credential stuffing</em> — systematically testing the stolen pair against other popular services.</p>
+
+      <h3>Safe Password Storage: What Providers Should Be Doing</h3>
+      <p>When you create an account, your password must be stored in a way that allows verification at login without exposing the plaintext. The industry-standard approach is <em>password hashing</em>: a one-way mathematical transformation that converts your password into a fixed-length output that cannot be reversed. When you log in, the same algorithm is applied to your input; if the outputs match, you are authenticated — without the server ever knowing your actual password.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 130" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="hash-diagram-title">
+          <title id="hash-diagram-title">Password hashing process from plaintext to stored hash</title>
+          <defs>
+            <marker id="arrowGold4" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <rect x="10" y="35" width="170" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="95" y="60" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">You type</text>
+          <text x="95" y="79" text-anchor="middle" fill="var(--gold-light)" font-family="Courier New, monospace" font-size="10">Tr0ub4dor&amp;3</text>
+
+          <path d="M182 65 H228" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold4)"/>
+
+          <rect x="230" y="30" width="220" height="70" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="340" y="55" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Hash function</text>
+          <text x="340" y="73" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">bcrypt / Argon2 / scrypt</text>
+          <text x="340" y="89" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="9" font-style="italic">one-way — cannot be reversed</text>
+
+          <path d="M452 65 H490" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold4)"/>
+
+          <rect x="492" y="35" width="222" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="603" y="58" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="11.5" font-weight="600">Stored in database</text>
+          <text x="603" y="78" text-anchor="middle" fill="var(--gold-light)" font-family="Courier New, monospace" font-size="8.5">$2b$12$KIXQ...9f2Lk</text>
+        </svg>
+        <div class="diagram-caption">Your real password is never stored — only the one-way hash of it, which is checked again at each login.</div>
+      </div>
+
+      <p>When a provider is breached, a strong hash buys time: attackers must expend significant computational resources to crack the hashes. Providers who store passwords in plaintext or using weak encryption (as Adobe infamously did in 2013) hand credentials directly to attackers.</p>
+
+      <h3>Checking Your Exposure</h3>
+      <p>The most widely used data-breach notification service is <a href="https://haveibeenpwned.com/" target="_blank" rel="noopener">Have I Been Pwned?</a>. Enter your email address to see whether your credentials appear in any known breaches, and sign up for notifications so you receive an alert the moment your address surfaces in a new data dump.</p>
+
+      <h3>How Attackers Break Passwords</h3>
+      <p>Password attacks fall into two categories. <strong>Local attacks</strong> work offline on a stolen hash file, either brute-forcing character sequences or running through pre-built wordlists (often mutated with symbols and numbers). <strong>Remote attacks</strong> either brute-force login endpoints directly or use credential stuffing to test known username/password pairs against target services.</p>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── MFA + PASSWORD MANAGERS ── -->
+    <section class="blog-section" id="mfa">
+      <div class="section-eyebrow">Defence Layer</div>
+      <h2>Multi-Factor Authentication &amp; Password Managers</h2>
+
+      <h3>Multi-Factor Authentication (MFA)</h3>
+      <p>MFA requires more than one credential to authenticate. The three classical factors are:</p>
+      <ul>
+        <li><strong>Something you have</strong> — a TOTP code, smart card, or hardware key such as a YubiKey.</li>
+        <li><strong>Something you know</strong> — a password or PIN.</li>
+        <li><strong>Something you are</strong> — biometric data: fingerprint, face, or iris scan.</li>
+      </ul>
+      <p>Even two factors are a major upgrade over one. With MFA active, an attacker who steals your password still needs your phone (or the ability to intercept your messages) to access your account.</p>
+
+      <div class="callout">
+        <p><strong>Avoid SMS-based TOTP where possible.</strong> Attackers have successfully rerouted victims' text messages to intercept one-time codes. Use an authenticator app — such as Authy or Google Authenticator — that generates codes entirely on-device with no network dependency.</p>
+      </div>
+
+      <!-- CASE STUDY: MFA FACTORS -->
+      <div class="case-study" id="case-mfa">
+        <button class="case-study-toggle" aria-expanded="false" aria-controls="cs-mfa-body" onclick="toggleCase(this)">
+          <span class="cs-label">
+            <span class="cs-badge">Background</span>
+            <span class="cs-title">Setting Up an Authenticator App — Step by Step</span>
+          </span>
+          <span class="cs-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="case-study-body" id="cs-mfa-body">
+          <p>Most services now offer "Authenticator App" as an MFA option. When you select it, you will see a QR code and a secret key. Scan the QR code (or manually enter the key) into an authenticator app such as Authy or Google Authenticator. The app will begin generating six-digit TOTP codes that refresh every 30 seconds.</p>
+          <p>These codes are generated mathematically from your secret key and the current timestamp — no network connection required. Even if an attacker intercepts a code, it expires within seconds, making it effectively useless unless used immediately.</p>
+          <p>Enable this wherever it is offered. The mild inconvenience of entering a second code is far outweighed by the security benefit.</p>
+        </div>
+      </div>
+
+      <h3>Password Managers</h3>
+      <p>Since the most secure passwords are long, random strings that humans cannot memorise, password managers exist to bridge the gap. They store your credentials in an encrypted vault — either locally on your device or in a cloud service — secured behind a single master password or biometric authentication.</p>
+      <p>Well-designed password managers also generate strong, unique passwords for each service and auto-fill them on login, eliminating both the memorisation burden and the temptation to reuse passwords. Some also store other sensitive data — secure notes, payment cards, ID documents — and alert you when stored passwords appear in known breaches.</p>
+
+      <p>Recommended options include <a href="https://1password.com/" target="_blank" rel="noopener">1Password</a>, <a href="https://bitwarden.com/" target="_blank" rel="noopener">Bitwarden</a> (open-source), <a href="https://keepass.info/" target="_blank" rel="noopener">KeePass</a> (local-only), and <a href="https://www.lastpass.com/" target="_blank" rel="noopener">LastPass</a>. Research each to find the best fit for your threat model.</p>
+
+      <div class="callout">
+        <p><strong>Your master password is the single point of failure.</strong> Make it long, unique, and something you have never used anywhere else. Consider using a passphrase approach for it.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── PUBLIC WIFI ── -->
+    <section class="blog-section" id="public-wifi">
+      <div class="section-eyebrow">Attack Vector #7</div>
+      <h2>Public Wi-Fi &amp; Network Security</h2>
+
+      <p>Public Wi-Fi networks — in cafés, airports, hotels, and public transport — are a gift to attackers. The most straightforward attack is the <strong>man-in-the-middle (MITM)</strong>: an attacker creates a rogue access point with a plausible name, waits for users to connect, and then silently records all network traffic passing through it.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="mitm-diagram-title">
+          <title id="mitm-diagram-title">Man-in-the-middle attack on a public Wi-Fi network</title>
+          <defs>
+            <marker id="arrowGold5" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <rect x="6" y="40" width="160" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="86" y="65" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Your device</text>
+          <text x="86" y="83" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">connects to "Free_Airport_WiFi"</text>
+
+          <path d="M168 70 H206" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold5)"/>
+
+          <rect x="208" y="20" width="220" height="100" rx="6" fill="#7a1e1e" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="318" y="46" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Rogue Access Point</text>
+          <text x="318" y="64" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">run by the attacker</text>
+          <text x="318" y="84" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="9" font-style="italic">reads / records all</text>
+          <text x="318" y="99" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="9" font-style="italic">unencrypted traffic</text>
+
+          <path d="M430 70 H468" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold5)"/>
+
+          <rect x="470" y="40" width="240" height="60" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="590" y="65" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">The real internet</text>
+          <text x="590" y="83" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">forwarded on, after being read</text>
+        </svg>
+        <div class="diagram-caption">A VPN encrypts your traffic before it reaches the rogue access point, making the middle step useless to an attacker.</div>
+      </div>
+
+      <p>On unencrypted (HTTP) connections, credentials and session tokens are readable in plaintext. Even on modern HTTPS connections, metadata can leak information about browsing habits, and sophisticated attackers can attempt SSL stripping or exploit misconfigured certificates.</p>
+
+      <h3>How to Stay Protected</h3>
+      <p>The safest option is simply not connecting to untrusted networks. Use your mobile hotspot. When that is not feasible:</p>
+      <ul>
+        <li><strong>Use a VPN.</strong> A Virtual Private Network encrypts all traffic leaving your device, rendering interception useless. Avoid free VPNs — they often harvest your data to cover their costs. Reputable options include <a href="https://protonvpn.com/" target="_blank" rel="noopener">ProtonVPN</a> and <a href="https://mullvad.net/en/" target="_blank" rel="noopener">Mullvad VPN</a>.</li>
+        <li><strong>Look for the HTTPS padlock.</strong> Never enter credentials on any site without the padlock icon in your browser's address bar — especially on untrusted networks. A crossed-out or warning-sign padlock means the certificate is invalid; do not proceed.</li>
+        <li><strong>Do not dismiss certificate errors.</strong> Full-page certificate warnings usually mean something is wrong with the encrypted connection. Click "Go Back" and don't proceed.</li>
+      </ul>
+
+      <div class="callout">
+        <p><strong>Note:</strong> The HTTPS padlock confirms the <em>connection</em> is encrypted — it does not guarantee the website itself is safe. A phishing site can have a valid TLS certificate. Verify the domain name carefully regardless.</p>
+      </div>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── SUPPLY CHAIN & INSIDER THREATS ── -->
+    <section class="blog-section" id="supply-chain">
+      <div class="section-eyebrow">Attack Vector #8</div>
+      <h2>Supply Chain &amp; Insider Threats</h2>
+
+      <p>Some of the most damaging breaches never touch the victim directly. Instead, attackers compromise something the victim already trusts — a software vendor, a contractor, or an employee with legitimate access — and ride that trust straight in.</p>
+
+      <h3>Supply Chain Attacks</h3>
+      <p>A supply chain attack compromises a piece of software, a library, or a hardware component before it ever reaches you, so the infection arrives disguised as a routine, trusted update. Because the delivery mechanism is one you already trust and have approved, these attacks are exceptionally difficult to detect — your antivirus has no reason to flag software you installed on purpose from an official source.</p>
+
+      <div class="icon-grid">
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 20h8M12 18v2"/></svg>
+          <div class="icon-card-label">Software updates</div>
+          <div class="icon-card-desc">A vendor's build system is compromised; the next official update ships with hidden malicious code.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><path d="M12 2l3 6 6 1-4.5 4 1 6-5.5-3-5.5 3 1-6L3 9l6-1z"/></svg>
+          <div class="icon-card-label">Open-source packages</div>
+          <div class="icon-card-desc">A widely used code library is taken over or tricked into including a malicious dependency.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="10" y1="19" x2="14" y2="19"/></svg>
+          <div class="icon-card-label">Third-party vendors</div>
+          <div class="icon-card-desc">A contractor with network access is breached first, then used as a stepping stone into the real target.</div>
+        </div>
+      </div>
+
+      <h3>Insider Threats</h3>
+      <p>Not every risk comes from outside the organisation. An insider threat is a current or former employee, contractor, or partner who misuses legitimate access — sometimes deliberately (theft, sabotage, selling data) and sometimes by accident (misconfiguring a system, falling for a scam, losing a device). Because insiders already hold valid credentials, their actions often look identical to normal, authorised activity, which makes this category especially hard to detect with technical controls alone.</p>
+
+      <h3>Reducing These Risks</h3>
+      <ul class="safety-list">
+        <li>Apply the <strong>principle of least privilege</strong> — give every account and every person only the access they actually need, nothing more.</li>
+        <li>Verify software and updates come from official sources, and where available, check published cryptographic checksums for downloaded files.</li>
+        <li>Revoke access immediately when an employee or contractor's role ends or changes.</li>
+        <li>Log and monitor access to sensitive systems, so unusual activity from a valid account is noticed rather than assumed to be normal.</li>
+        <li>Maintain an up-to-date inventory of every third-party vendor and library your organisation depends on.</li>
+      </ul>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── EMERGING & OVERLOOKED THREATS ── -->
+    <section class="blog-section" id="emerging">
+      <div class="section-eyebrow">Attack Vector #9</div>
+      <h2>Emerging &amp; Overlooked Threats</h2>
+
+      <p>The techniques above cover the bulk of what people run into. But attackers keep adapting, and a handful of newer or simply less-talked-about methods deserve attention precisely because most people have never heard of them — which is exactly why they work.</p>
+
+      <h3>SIM Swapping: Hijacking Your Phone Number</h3>
+      <p>A SIM swap attack doesn't touch your phone at all — it targets your mobile carrier. Using personal details gathered from social media or previous breaches, an attacker calls or messages your carrier's support line, impersonates you, and convinces them to transfer ("port") your phone number onto a SIM card the attacker controls. From that moment, your calls and texts — including SMS-based one-time codes — go straight to the attacker.</p>
+
+      <div class="diagram-box">
+        <svg viewBox="0 0 720 150" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="simswap-diagram-title">
+          <title id="simswap-diagram-title">SIM swap attack flow from impersonation to account takeover</title>
+          <defs>
+            <marker id="arrowGold6" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 Z" fill="var(--gold)"/>
+            </marker>
+          </defs>
+          <rect x="6" y="45" width="160" height="60" rx="6" fill="var(--navy)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="86" y="70" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Attacker</text>
+          <text x="86" y="88" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">poses as you to your carrier</text>
+
+          <path d="M168 75 H206" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold6)"/>
+
+          <rect x="208" y="45" width="170" height="60" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="293" y="70" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">Number ported</text>
+          <text x="293" y="88" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">to attacker's SIM card</text>
+
+          <path d="M380 75 H418" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold6)"/>
+
+          <rect x="420" y="45" width="140" height="60" rx="6" fill="var(--navy-mid)" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="490" y="66" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="12" font-weight="600">SMS codes</text>
+          <text x="490" y="84" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">now reach the attacker</text>
+
+          <path d="M562 75 H600" stroke="var(--gold)" stroke-width="2" marker-end="url(#arrowGold6)"/>
+
+          <rect x="602" y="45" width="112" height="60" rx="6" fill="#7a1e1e" stroke="var(--gold)" stroke-width="1.5"/>
+          <text x="658" y="70" text-anchor="middle" fill="#fff" font-family="Noto Sans, sans-serif" font-size="11.5" font-weight="600">Accounts</text>
+          <text x="658" y="88" text-anchor="middle" fill="var(--gold-light)" font-family="Noto Sans, sans-serif" font-size="9.5">taken over</text>
+        </svg>
+        <div class="diagram-caption">This is the strongest real-world case for app-based MFA over SMS — an app-generated code cannot be redirected this way.</div>
+      </div>
+
+      <p>Defend against it by asking your carrier to add a PIN or passcode required for any SIM changes or number ports, and by moving MFA on your important accounts away from SMS toward an authenticator app or hardware key wherever the option exists.</p>
+
+      <h3>Business Email Compromise (BEC): No Malware Required</h3>
+      <p>BEC — sometimes called "CEO fraud" — is pure social engineering aimed at businesses. An attacker either compromises or closely spoofs an executive's email account, then emails someone in finance or HR with an urgent, plausible request: an unusual wire transfer, a change to a supplier's bank details, a batch of gift cards for "client gifts." There is no malicious attachment, no link, and often no obvious technical red flag — just a convincing message that exploits hierarchy and urgency. It is consistently one of the costliest categories of cybercrime because the payouts, when they work, are large and the emails often sail past spam filters entirely.</p>
+      <p>Defend against it with a simple rule: any request to change payment details or move money gets verified through a second channel — a phone call to a known number, not a reply to the email itself — regardless of who it appears to be from or how urgent it sounds.</p>
+
+      <h3>A Few More Worth Knowing</h3>
+      <div class="icon-grid">
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="3" y="8" width="7" height="7"/><rect x="14" y="8" width="7" height="7"/><rect x="3" y="17" width="7" height="4"/><path d="M14 17h3v4h-3zM18 17h3v2"/></svg>
+          <div class="icon-card-label">Quishing (QR phishing)</div>
+          <div class="icon-card-desc">A malicious QR code — on a poster, a parking meter, or in an email — leads to a fake login page. Scan-first is riskier than it feels, since the destination is hidden until you're already there.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><path d="M12 3a4 4 0 0 1 4 4v3a4 4 0 0 1-8 0V7a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3"/></svg>
+          <div class="icon-card-label">AI voice cloning</div>
+          <div class="icon-card-desc">A few seconds of audio — from a video, a voicemail — is enough to clone a voice convincingly. Used to fake urgent calls from a "family member" or "boss" asking for money or access.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><circle cx="12" cy="12" r="3.5"/><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1"/></svg>
+          <div class="icon-card-label">Cryptojacking</div>
+          <div class="icon-card-desc">Malicious script or software quietly uses your device's processing power to mine cryptocurrency for the attacker. The main symptoms are a hot, slow, noisy machine — easy to write off as "old hardware."</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a13 13 0 0 1 0 18 13 13 0 0 1 0-18z"/></svg>
+          <div class="icon-card-label">Watering hole attacks</div>
+          <div class="icon-card-desc">Instead of attacking you directly, the attacker compromises a legitimate website your target group already visits regularly, then waits for visitors to become infected.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><line x1="7" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="7" y2="15"/></svg>
+          <div class="icon-card-label">Typosquatting</div>
+          <div class="icon-card-desc">Attackers register domains one keystroke away from a real one — a missing letter, a swapped ".cm" — and catch traffic from people who mistype a web address.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><circle cx="9" cy="10" r="1.4" fill="var(--navy-mid)"/><path d="M8 16l3-3 2 2 3-4"/></svg>
+          <div class="icon-card-label">Session hijacking</div>
+          <div class="icon-card-desc">Rather than stealing a password, an attacker steals an already-logged-in session cookie — from malware or an unsecured network — and walks straight past the login screen entirely.</div>
+        </div>
+      </div>
+
+      <h3>And a Few More Worth Recognising</h3>
+      <div class="icon-grid">
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 9h18"/><circle cx="8" cy="14" r="1.2" fill="var(--navy-mid)"/><path d="M12 14h6"/></svg>
+          <div class="icon-card-label">Clickjacking</div>
+          <div class="icon-card-desc">A malicious page overlays an invisible, real button (like "Follow" or "Transfer") on top of what looks like an ordinary link or game, so your genuine click triggers an action you never intended.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><path d="M12 9v.01M12 13v4"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <div class="icon-card-label">Scareware</div>
+          <div class="icon-card-desc">A pop-up falsely claims your device is "infected" and pressures you to call a number or install a "cleaner" tool — which is itself the malware. Real antivirus software never demands payment through a browser pop-up.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.2 10.8 15.8 7.2M8.2 13.2l7.6 3.6"/></svg>
+          <div class="icon-card-label">DNS spoofing</div>
+          <div class="icon-card-desc">The internet's address book (DNS) is tampered with so a correctly typed, legitimate web address quietly resolves to the attacker's server instead of the real one.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><path d="M12 2 3 7v6c0 5 4 8 9 9 5-1 9-4 9-9V7z"/><path d="M9 9l6 6M9 9l0 0"/></svg>
+          <div class="icon-card-label">Zero-day exploits</div>
+          <div class="icon-card-desc">An attack targeting a software flaw the vendor doesn't yet know about, so no patch exists at the time of the attack. Rare against ordinary individuals, but the reason "unknown" software risk can never be fully eliminated — only reduced.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 8h.01M8 12h.01M8 16h.01"/><path d="M12 8h4M12 12h4M12 16h4"/></svg>
+          <div class="icon-card-label">Fileless malware</div>
+          <div class="icon-card-desc">Instead of dropping a file to disk, the malicious code runs directly in memory using legitimate system tools already on your machine — making it invisible to antivirus scans that only look for suspicious files.</div>
+        </div>
+        <div class="icon-card">
+          <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--navy-mid)" stroke-width="1.8"><rect x="3" y="10" width="18" height="8" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+          <div class="icon-card-label">Formjacking</div>
+          <div class="icon-card-desc">Attackers inject a few lines of hidden code into a legitimate checkout page, silently copying payment card details as shoppers type them — the site itself keeps working normally throughout.</div>
+        </div>
+      </div>
+
+      <!-- CASE STUDY: ZERO-DAY -->
+      <div class="case-study" id="case-zeroday">
+        <button class="case-study-toggle" aria-expanded="false" aria-controls="cs-zeroday-body" onclick="toggleCase(this)">
+          <span class="cs-label">
+            <span class="cs-badge">Case Study</span>
+            <span class="cs-title">Log4Shell — A Single Logging Flaw, Millions of Servers</span>
+          </span>
+          <span class="cs-arrow" aria-hidden="true">▾</span>
+        </button>
+        <div class="case-study-body" id="cs-zeroday-body">
+          <p>In December 2021, security researchers disclosed a critical zero-day flaw in Log4j, a logging library used quietly inside an enormous share of the world's Java-based software — from cloud platforms to games to enterprise systems. The flaw, nicknamed Log4Shell, allowed an attacker to gain remote code execution simply by getting a single crafted string logged by a vulnerable application.</p>
+          <p>Because Log4j was buried so deep inside so much software that even many system administrators didn't know they were running it, the scale of exposure was almost impossible to measure at first. Attackers began scanning the entire internet for vulnerable systems within hours of disclosure, well before most organisations had identified whether they were affected, let alone patched.</p>
+          <p>The lesson extends beyond any one library: modern software is built from many layers of other people's code, and a flaw in a component you've never heard of can still be a flaw in your system. Maintaining an inventory of your software's dependencies is what makes it possible to respond quickly when the next one surfaces.</p>
+        </div>
+      </div>
+
+      <h3>Staying Ahead of the Curve</h3>
+      <ul class="safety-list">
+        <li>Set up a SIM-swap PIN with your mobile carrier and prefer authenticator apps or hardware keys over SMS for MFA.</li>
+        <li>Verify any request to move money or change payment details through a separate, independently confirmed channel.</li>
+        <li>Prefer typing a known web address or using a saved bookmark over scanning an unfamiliar QR code, and check the destination URL before entering anything.</li>
+        <li>Treat urgent, emotional voice or video requests — especially about money — with the same suspicion as an urgent email, even if the voice sounds exactly right.</li>
+        <li>Watch for unexplained slowdowns, heat, or battery drain, which can be early signs of cryptojacking or other background malware.</li>
+        <li>Dismiss "your device is infected" pop-ups by closing the browser tab entirely — never call a number or click a button inside one.</li>
+        <li>Keep browsers and plugins updated, since they are the most common entry point for both clickjacking and fileless attacks delivered through malicious ads or pages.</li>
+      </ul>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── BACKUPS ── -->
+    <section class="blog-section" id="backups">
+      <div class="section-eyebrow">Defence Layer</div>
+      <h2>Backups: Your Last Line of Defence</h2>
+
+      <p>No defensive measure is more universally important than backups. Regardless of what attack succeeds against you — ransomware, hardware failure, accidental deletion — a current, correctly stored backup means you can recover. Without one, you may not.</p>
+
+      <h3>The 3-2-1 Rule</h3>
+      <p>The industry-standard backup strategy is simple to remember and robustly effective:</p>
+
+      <div class="rule-cards">
+        <div class="rule-card">
+          <div class="rule-num">3</div>
+          <div class="rule-label">Copies</div>
+          <div class="rule-desc">Keep at least three up-to-date copies of your data, including the original.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">2</div>
+          <div class="rule-label">Media Types</div>
+          <div class="rule-desc">Store copies on at least two different media — e.g., a local drive and a cloud service.</div>
+        </div>
+        <div class="rule-card">
+          <div class="rule-num">1</div>
+          <div class="rule-label">Off-Site</div>
+          <div class="rule-desc">At least one copy should be stored off-site. Cloud services (Google Drive, iCloud) are ideal for personal use.</div>
+        </div>
+      </div>
+
+      <p>Equally critical is <em>frequency</em>. Backups from six months ago will not save you. A high-risk organisation may need full backups multiple times per day; a home user should aim for at least weekly. Automate the process where possible — manual backups tend not to happen when life gets busy.</p>
+    </section>
+
+    <hr class="section-divider"/>
+
+    <!-- ── UPDATES ── -->
+    <section class="blog-section" id="updates">
+      <div class="section-eyebrow">Defence Layer</div>
+      <h2>Software Updates &amp; Antivirus</h2>
+
+      <h3>Why Updates Matter</h3>
+      <p>When vulnerabilities are discovered in software, developers release <em>patches</em> — targeted fixes that close the security hole. Failing to apply patches leaves known, documented vulnerabilities open for attackers to exploit. The WannaCry case study above illustrates this with devastating clarity: a patch was available; millions of systems went unpatched; the consequences were global and severe.</p>
+
+      <p>Always install updates promptly — especially for operating systems, browsers, and software that handles external input. When software reaches <strong>End of Life (EOL)</strong> and no longer receives updates, it must be replaced. If replacement is not immediately possible, isolate the device from the network to minimise exposure.</p>
+
+      <h3>Antivirus Signature Updates</h3>
+      <p>Most antivirus engines work by maintaining a local database of known malware signatures. When new malware is discovered, vendors generate a signature and distribute it to all installations. If your antivirus is not allowed to update, its signature database rapidly becomes stale — meaning newly discovered malware can slip through undetected.</p>
+
+      <p>When your antivirus requests an update: let it run. The few seconds of inconvenience are a worthwhile trade-off for protection against the latest known threats.</p>
+
+      <div class="callout">
+        <p><strong>Summary:</strong> Update promptly, backup regularly, enable MFA everywhere, use a password manager, stay sceptical of unsolicited contact, and never plug in unknown hardware. These habits eliminate the vast majority of attack surface available to adversaries targeting ordinary users.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="inner">
+    <div class="name">Vineet Pratap Singh</div>
+    <div class="contact">
+      <a href="https://psvineet.me" target="_blank" rel="noopener noreferrer">psvineet.me</a>
+      <a href="mailto:connect.vps@icloud.com">connect.vps@icloud.com</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  function toggleCase(btn) {
+    const expanded = btn.getAttribute('aria-expanded') === 'true';
+    btn.setAttribute('aria-expanded', String(!expanded));
+    const bodyId = btn.getAttribute('aria-controls');
+    const body = document.getElementById(bodyId);
+    if (body) body.classList.toggle('open', !expanded);
+  }
+
+  // Active TOC highlight on scroll
+  (function() {
+    const sections = document.querySelectorAll('.blog-section[id]');
+    const links = document.querySelectorAll('.sidebar-toc .toc-link');
+    if (!sections.length || !links.length) return;
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          links.forEach(l => l.classList.remove('active'));
+          const active = document.querySelector('.sidebar-toc a[href="#' + e.target.id + '"]');
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+    sections.forEach(s => obs.observe(s));
+  })();
+</script>
+</body>
+</html>
