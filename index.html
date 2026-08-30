@@ -23,15 +23,8 @@
     }
 
     .wrap {
-      width: min(560px, 100%);
+      width: min(620px, 100%);
       text-align: center;
-    }
-
-    .line {
-      width: 40px;
-      height: 3px;
-      margin: 0 auto 28px;
-      background: #b8954a;
     }
 
     .tag {
@@ -44,7 +37,7 @@
     }
 
     h1 {
-      font-size: clamp(32px, 7vw, 52px);
+      font-size: clamp(24px, 5.5vw, 48px);
       font-weight: 800;
       letter-spacing: -1.5px;
       line-height: 1.1;
@@ -53,7 +46,7 @@
     }
 
     @media (max-width: 560px) {
-      h1 { white-space: normal; }
+      h1 { white-space: normal; font-size: clamp(28px, 8vw, 36px); }
     }
 
     .author {
@@ -68,7 +61,6 @@
     }
 
     .message {
-      max-width: 480px;
       margin: 0 auto 16px;
       font-size: clamp(15px, 2vw, 17px);
       color: #4f5865;
@@ -93,9 +85,7 @@
       color: #4f5865;
     }
 
-    #seconds {
-      color: #b8954a;
-    }
+    #seconds { color: #b8954a; }
 
     .progress {
       height: 2px;
