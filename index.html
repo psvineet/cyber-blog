@@ -1,299 +1,198 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<meta name="description" content="Redirecting to the author's portfolio.">
-
-<title>Redirecting — psvineet.me</title>
-
-<style>
-    :root {
-        --cream: #faf7ef;
-        --navy: #10233f;
-        --gold: #b8954a;
-        --text: #4f5865;
-        --border: rgba(16, 35, 63, 0.12);
-    }
-
-    * {
-        box-sizing: border-box;
-    }
-
-    html,
-    body {
-        margin: 0;
-        min-height: 100%;
-    }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Redirecting to the author's portfolio.">
+  <title>Redirecting — psvineet.me</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-        min-height: 100vh;
-        min-height: 100dvh;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        padding: 24px;
-
-        background: var(--cream);
-        color: var(--navy);
-
-        /* Universal system font */
-        font-family:
-            system-ui,
-            -apple-system,
-            BlinkMacSystemFont,
-            "Segoe UI",
-            Roboto,
-            Helvetica,
-            Arial,
-            sans-serif;
+      min-height: 100svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: #faf7ef;
+      font-family: 'Noto Sans', system-ui, sans-serif;
+      color: #10233f;
     }
 
-    .container {
-        width: 100%;
-        max-width: 620px;
-        text-align: center;
+    .wrap {
+      width: min(560px, 100%);
+      text-align: center;
     }
 
     .line {
-        width: 48px;
-        height: 3px;
-        margin: 0 auto 30px;
-        background: var(--gold);
+      width: 40px;
+      height: 3px;
+      margin: 0 auto 28px;
+      background: #b8954a;
     }
 
-    .label {
-        margin-bottom: 14px;
-
-        color: var(--gold);
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 2px;
-        text-transform: uppercase;
+    .tag {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: #b8954a;
+      margin-bottom: 16px;
     }
 
     h1 {
-        margin: 0;
+      font-size: clamp(32px, 7vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
 
-        color: var(--navy);
-        font-size: clamp(32px, 7vw, 52px);
-        line-height: 1.1;
-        font-weight: 650;
-        letter-spacing: -1.5px;
+    .author {
+      font-size: 13px;
+      color: #9aa0a8;
+      margin-bottom: 18px;
+    }
+
+    .author strong {
+      color: #b8954a;
+      font-weight: 600;
     }
 
     .message {
-        max-width: 520px;
-        margin: 20px auto 0;
-
-        color: var(--text);
-        font-size: clamp(15px, 2vw, 17px);
-        line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 30px;
+      font-size: clamp(15px, 2vw, 17px);
+      color: #4f5865;
+      line-height: 1.65;
     }
 
-    .site {
-        color: var(--navy);
-        font-weight: 700;
+    .message .site {
+      color: #10233f;
+      font-weight: 700;
     }
 
-    .redirect-box {
-        max-width: 420px;
-        margin: 30px auto 0;
-        padding: 18px;
-
-        border: 1px solid var(--border);
-        background: rgba(255, 255, 255, 0.35);
+    .box {
+      max-width: 400px;
+      margin: 0 auto 26px;
+      padding: 18px 20px;
+      border: 1px solid rgba(16, 35, 63, .12);
+      background: rgba(255, 255, 255, .35);
     }
 
     .countdown {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-
-        color: var(--text);
-        font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 14px;
+      color: #4f5865;
     }
 
     #seconds {
-        min-width: 22px;
-
-        color: var(--gold);
-        font-size: 18px;
-        font-weight: 700;
+      min-width: 22px;
+      color: #b8954a;
+      font-size: 18px;
+      font-weight: 700;
     }
 
     .progress {
-        width: 100%;
-        height: 2px;
-        margin-top: 14px;
-
-        overflow: hidden;
-        background: rgba(16, 35, 63, 0.1);
+      height: 2px;
+      margin-top: 14px;
+      background: rgba(16, 35, 63, .1);
+      overflow: hidden;
     }
 
     .progress-bar {
-        width: 100%;
-        height: 100%;
-
-        background: var(--gold);
-
-        transform-origin: left;
-        animation: countdown 5s linear forwards;
+      height: 100%;
+      background: #b8954a;
+      transform-origin: left;
+      animation: drain 5s linear forwards;
     }
 
-    @keyframes countdown {
-        from {
-            transform: scaleX(1);
-        }
+    @keyframes drain { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
-        to {
-            transform: scaleX(0);
-        }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 46px;
+      padding: 0 24px;
+      background: #10233f;
+      color: #fff;
+      font-family: 'Noto Sans', system-ui, sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      border: 1px solid #10233f;
+      transition: .2s ease;
     }
 
-    .button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-
-        min-height: 46px;
-        margin-top: 24px;
-        padding: 0 22px;
-
-        border: 1px solid var(--navy);
-        background: var(--navy);
-        color: #ffffff;
-
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-
-        transition: 0.2s ease;
-    }
-
-    .button:hover {
-        background: transparent;
-        color: var(--navy);
-        border-color: var(--gold);
+    .btn:hover {
+      background: transparent;
+      color: #10233f;
+      border-color: #b8954a;
     }
 
     .note {
-        margin-top: 16px;
-
-        color: #7a818b;
-        font-size: 12px;
-        line-height: 1.5;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #9aa0a8;
+      line-height: 1.5;
     }
 
-    .note strong {
-        color: var(--navy);
-    }
+    .note strong { color: #10233f; }
 
-    @media (max-width: 480px) {
-        body {
-            padding: 20px;
-        }
-
-        .line {
-            margin-bottom: 24px;
-        }
-
-        h1 {
-            font-size: 34px;
-            letter-spacing: -1px;
-        }
-
-        .message {
-            margin-top: 16px;
-            font-size: 14px;
-        }
-
-        .redirect-box {
-            margin-top: 24px;
-            padding: 16px;
-        }
-
-        .button {
-            width: 100%;
-        }
-    }
+    @media (max-width: 400px) { .btn { width: 100%; } }
 
     @media (prefers-reduced-motion: reduce) {
-        .progress-bar {
-            animation: none;
-        }
-
-        .button {
-            transition: none;
-        }
+      .progress-bar { animation: none; transform: scaleX(0); }
+      .btn { transition: none; }
     }
-</style>
-
-
+  </style>
 </head>
-
 <body>
-
-<main class="container">
-
-    <div class="line"></div>
-
-    <div class="label">Blog moved</div>
-
+  <main class="wrap">
+    <p class="tag">Blog moved</p>
     <h1>You are being redirected</h1>
-
+    <p class="author">A blog by <strong>Vineet Pratap Singh</strong></p>
     <p class="message">
-        This blog is now part of the author's portfolio.
-        You will be taken to
-        <span class="site">psvineet.me</span>.
+      This blog is now part of the author's portfolio.
+      You will be taken to <span class="site">psvineet.me</span>.
     </p>
-
-    <div class="redirect-box">
-
-        <div class="countdown">
-            Redirecting in
-            <span id="seconds">5</span>
-            seconds
-        </div>
-
-        <div class="progress">
-            <div class="progress-bar"></div>
-        </div>
-
+    <div class="box">
+      <div class="countdown">
+        Redirecting in <span id="seconds">5</span> seconds
+      </div>
+      <div class="progress">
+        <div class="progress-bar"></div>
+      </div>
     </div>
-
-    <a class="button" href="https://psvineet.me">
-        Go to Portfolio
-    </a>
-
-    <p class="note">
-        Open the <strong>Blog</strong> section there to read the articles.
-    </p>
-
-</main>
-
-<script>
-    const redirectURL = "https://psvineet.me";
-    const secondsElement = document.getElementById("seconds");
-
-    let seconds = 5;
-
-    const countdown = setInterval(() => {
-        seconds--;
-        secondsElement.textContent = seconds;
-
-        if (seconds <= 0) {
-            clearInterval(countdown);
-            window.location.href = redirectURL;
+    <div id="fallback" style="display:none">
+      <a class="btn" href="https://psvineet.me">Go to Portfolio</a>
+      <p class="note">Open the <strong>Blog</strong> section there to read the articles.</p>
+    </div>
+  </main>
+  <script>
+    const el = document.getElementById('seconds');
+    let n = 5;
+    const t = setInterval(() => {
+      el.textContent = --n;
+      if (n <= 0) {
+        clearInterval(t);
+        try {
+          window.location.href = 'https://psvineet.me';
+          setTimeout(() => {
+            document.getElementById('fallback').style.display = 'block';
+          }, 1500);
+        } catch(e) {
+          document.getElementById('fallback').style.display = 'block';
         }
+      }
     }, 1000);
-</script>
-
+  </script>
 </body>
 </html>
