@@ -94,9 +94,10 @@
     .code-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); font-weight: 700; margin-bottom: 0.2rem; }
 
     /* ── ATTACK TABLE ── */
-    .attack-table { width: 100%; border-collapse: collapse; margin: 1.2rem 0 1.5rem; font-family: var(--font-sans); font-size: 0.88rem; }
+    .table-wrap { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1.2rem 0 1.5rem; }
+    .attack-table { width: 100%; border-collapse: collapse; font-family: var(--font-sans); font-size: 0.88rem; white-space: nowrap; }
     .attack-table th { background: var(--navy); color: var(--gold-light); text-align: left; padding: 0.65rem 1rem; font-weight: 600; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
-    .attack-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--cream-border); vertical-align: top; line-height: 1.6; }
+    .attack-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--cream-border); vertical-align: top; line-height: 1.6; white-space: normal; }
     .attack-table tr:nth-child(even) td { background: var(--cream-dark); }
     .attack-table td:first-child { font-weight: 700; color: var(--navy-mid); white-space: nowrap; width: 150px; }
 
@@ -129,8 +130,6 @@
       .sidebar-toc { display: none; }
     }
     @media (max-width: 600px) {
-      .attack-table { font-size: 0.8rem; }
-      .attack-table td:first-child { width: 100px; white-space: normal; }
       .technique-cards { grid-template-columns: 1fr; }
     }
     @media (max-width: 400px) { .toc-links { flex-direction: column; } }
@@ -334,29 +333,31 @@ to your MySQL server version for the right syntax to use near ''1'' at line 1</c
 
       <p><code>OR 1=1</code> is always true, so the query returns every user. The <code>--</code> comments out the password check. The application logs you in as the first row returned — typically an admin account. To target a specific user, inject their name directly: <code>admin'--</code> produces a query that matches only the admin row and skips the password check entirely.</p>
 
+      <div class="table-wrap">
       <table class="attack-table" aria-label="Authentication bypass payloads">
         <thead>
           <tr><th>Payload</th><th>What It Does</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td><code>' OR 1=1--</code></td>
-            <td>Bypasses login, returns the first user in the table (often admin).</td>
+            <td data-label="Payload"><code>' OR 1=1--</code></td>
+            <td data-label="What It Does">Bypasses login, returns the first user in the table (often admin).</td>
           </tr>
           <tr>
-            <td><code>admin'--</code></td>
-            <td>Logs in as the specific user "admin" without a password.</td>
+            <td data-label="Payload"><code>admin'--</code></td>
+            <td data-label="What It Does">Logs in as the specific user "admin" without a password.</td>
           </tr>
           <tr>
-            <td><code>' OR 1=1#</code></td>
-            <td>Same bypass using MySQL's alternative comment character.</td>
+            <td data-label="Payload"><code>' OR 1=1#</code></td>
+            <td data-label="What It Does">Same bypass using MySQL's alternative comment character.</td>
           </tr>
           <tr>
-            <td><code>" OR 1=1--</code></td>
-            <td>For queries that wrap input in double quotes instead of single.</td>
+            <td data-label="Payload"><code>" OR 1=1--</code></td>
+            <td data-label="What It Does">For queries that wrap input in double quotes instead of single.</td>
           </tr>
         </tbody>
       </table>
+      </div>
     </section>
 
     <hr class="section-divider"/>
@@ -392,25 +393,27 @@ to your MySQL server version for the right syntax to use near ''1'' at line 1</c
       </div>
 
       <h3>Choosing Between Boolean and Time-Based</h3>
+      <div class="table-wrap">
       <table class="attack-table" aria-label="Blind injection technique selection">
         <thead>
           <tr><th>What the App Does</th><th>Technique to Use</th></tr>
         </thead>
         <tbody>
           <tr>
-            <td>Returns different content for true vs. false</td>
-            <td>Boolean-Based</td>
+            <td data-label="What the App Does">Returns different content for true vs. false</td>
+            <td data-label="Technique to Use">Boolean-Based</td>
           </tr>
           <tr>
-            <td>Response looks identical regardless of condition</td>
-            <td>Time-Based</td>
+            <td data-label="What the App Does">Response looks identical regardless of condition</td>
+            <td data-label="Technique to Use">Time-Based</td>
           </tr>
           <tr>
-            <td>SLEEP() is blocked or network is too noisy</td>
-            <td>Out-of-Band (see next section)</td>
+            <td data-label="What the App Does">SLEEP() is blocked or network is too noisy</td>
+            <td data-label="Technique to Use">Out-of-Band (see next section)</td>
           </tr>
         </tbody>
       </table>
+      </div>
     </section>
 
     <hr class="section-divider"/>
